@@ -3,7 +3,6 @@ const initialState = {
 }
 
 const product = (state = initialState, action) => {
-    //console.log(action.type);
     switch (action.type) {
         case 'CREATE_PRODUCT_PENDING':
             return {
@@ -14,10 +13,10 @@ const product = (state = initialState, action) => {
                 ...state
             }
         case 'CREATE_PRODUCT_FULFILLED':
-            const newData = [...state.products, action.payload.data.result]
+            const newProduct = [...state.products, action.payload.data.result]
             return {
                 ...state,
-                products: newData
+                products: newProduct
             }
 
         case 'READ_PRODUCT_PENDING':
@@ -45,7 +44,7 @@ const product = (state = initialState, action) => {
             }
 
         case 'UPDATE_PRODUCT_FULFILLED':
-            const newProdukfterUpdate = state.products.map(product => {
+            const newProductAfterUpdate = state.products.map(product => {
                 if (product.id === action.payload.data.result.id) {
                     return action.payload.data.result;
                 }
@@ -53,7 +52,7 @@ const product = (state = initialState, action) => {
             })
             return {
                 ...state,
-                products: newProdukfterUpdate
+                products: newProductAfterUpdate
             }
 
         case 'DELETE_PRODUCT_PENDING':
@@ -65,10 +64,10 @@ const product = (state = initialState, action) => {
                 ...state
             }
         case 'DELETE_PRODUCT_FULFILLED':
-            const newProdukAfterDelete = state.products.filter(product => product.id !== action.payload.data.result)
+            const newProductAfterDelete = state.products.filter(product => product.id !== action.payload.data.result)
             return {
                 ...state,
-                products: newProdukAfterDelete
+                products: newProductAfterDelete
             }
 
         case 'SEARCH_PRODUCT_PENDING':

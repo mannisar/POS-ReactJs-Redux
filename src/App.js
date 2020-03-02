@@ -8,6 +8,7 @@ import "./App.css";
 import Login from "./auth/Login"
 import Home from "./controllers/Home"
 import Product from "./controllers/Product"
+import Category from "./controllers/Category"
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/product" component={Product} />
-        {/* <Route path="/product" render={props => <Product {...props} />} /> */}
+        <Route path="/category" component={Category} />
       </Router>
     </Provider>
   );

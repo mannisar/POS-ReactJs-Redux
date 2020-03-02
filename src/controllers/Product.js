@@ -5,10 +5,10 @@ import { Form, Container, Row, Col, Button, Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { readProduct, searchProduct } from '../redux/actions/product';
 
+import Item from '../components/modal/product/Item';
 import Add from '../components/modal/product/Add';
-import Item from '../components/modal/product/Item'
 import Edit from '../components/modal/product/Edit';
-import Delete from '../components/modal/product/Delete'
+import Delete from '../components/modal/product/Delete';
 
 class Product extends Component {
   state = {
@@ -20,7 +20,11 @@ class Product extends Component {
   }
 
   componentDidMount() {
-    this.readProduct();
+    if (!localStorage.getItem('isAuth')) {
+      this.props.history.push('/login');
+    } else {
+      this.readProduct();
+    }
   }
 
   readProduct() {

@@ -6,7 +6,7 @@ import { updateProduct } from '../../../redux/actions/product'
 
 class Edit extends Component {
     state = {
-        //productId: "",
+        productId: "",
         name_product: "",
         description: "",
         image: "", // kosong
@@ -21,10 +21,10 @@ class Edit extends Component {
 
     onSetValue = (product) => {
         this.setState({
-            //productId: product.id,
+            productId: product.id,
             name_product: product.name_product,
             description: product.description,
-            image: product.image,
+            //image: product.image,
             price: product.price,
             stock: product.stock,
             categoryId: product.id_category
@@ -53,17 +53,15 @@ class Edit extends Component {
         data.append("stock", this.state.stock);
         data.append("id_category", this.state.categoryId);
 
-        if (this.state.image.length > 0) {
-            // data.delete("image")
-            // const productId = this.props.product.id
-            // await this.props.dispatch(updateProduct(productId, data))
-            // await this.props.onHide()
-            console.log("no update img")
+        if (this.state.image === "") {
+            data.delete("image")
+            const productId = this.state.productId
+            await this.props.dispatch(updateProduct(productId, data))
+            await this.props.onHide()
         } else {
-            // const productId = this.props.product.id
-            // await this.props.dispatch(updateProduct(productId, data))
-            // await this.props.onHide()
-            console.log("update img")
+            const productId = this.state.productId
+            await this.props.dispatch(updateProduct(productId, data))
+            await this.props.onHide()
         }
     }
 

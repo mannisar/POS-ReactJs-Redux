@@ -2,107 +2,83 @@ import axios from 'axios';
 
 
 export const createProduct = (data) => {
+    const authorization = localStorage.getItem('token');
+    const userId = localStorage.getItem("user-id");
     return {
         type: 'CREATE_PRODUCT',
         payload: axios({
             method: "POST",
             url: "http://localhost:3004/api/product",
-            data: data
+            data: data,
+            headers: {
+                "authorization": authorization,
+                "user-id": userId
+            }
         })
     }
 }
 
 export const readProduct = () => {
+    const authorization = localStorage.getItem('token');
+    const userId = localStorage.getItem("user-id");
     return {
         type: 'READ_PRODUCT',
         payload: axios({
             method: "GET",
-            url: "http://localhost:3004/api/product"
+            url: "http://localhost:3004/api/product",
+            headers: {
+                "authorization": authorization,
+                "user-id": userId
+            }
         })
     }
 }
 
 export const updateProduct = (productId, data) => {
+    const authorization = localStorage.getItem('token');
+    const userId = localStorage.getItem("user-id");
     return {
         type: 'UPDATE_PRODUCT',
         payload: axios({
             method: "PATCH",
             url: `http://localhost:3004/api/product/${productId}`,
-            data: data
+            data: data,
+            headers: {
+                "authorization": authorization,
+                "user-id": userId
+            }
         })
     }
 }
 
-// export const updateProduct = (productId, data) => {
-//     return function (dispatch) {
-//         return fetch(`http://localhost:3004/api/product/${productId}`, data)
-//             .then(
-//                 response => response.json(),
-//                 error => console.log('An error occurred.', error)
-//             )
-//             .then(
-//                 json => dispatch(updateProduct(json))
-//             )
-//     }
-// }
-
-// export const updateProduct = (productId, data) => {
-//     return {
-//         type: 'UPDATE_PRODUCT',
-//         payload: axios({
-//             method: "FETCH",
-//             url: `http://localhost:3004/api/product/${productId}`,
-//             data: data
-//         })
-//     }
-// }
-
-// export const updateProduct = (productId, data) => {
-//     return {
-//         type: 'UPDATE_PRODUCT',
-//         payload: axios({
-//             // method: "PATCH",
-//             // url: fetch(`http://localhost:3004/api/product/${productId}`, data),
-//             url: fetch(`http://localhost:3004/api/product/${productId}`, {
-//                 method: 'PATCH',
-//                 headers: {
-//                     'Accept': 'application/json',
-//                     'Content-Type': 'application/json'
-//                 }
-//             }, data)
-//         })
-//     }
-// }
-
-// export const updateProduct = (productId, data) => {
-//     return fetch(`http://localhost:3004/api/product/${productId}`, data)
-// }
-
-// export const updateProduct = (productId, data) => {
-//     return {
-//         type: 'UPDATE_PRODUCT',
-//         paylod: {
-//             data: fetch(`http://localhost:3004/api/product/${productId}`, data)
-//         }
-//     }
-// }
-
 export const deleteProduct = (productId) => {
+    const authorization = localStorage.getItem('token');
+    const userId = localStorage.getItem("user-id");
     return {
         type: 'DELETE_PRODUCT',
         payload: axios({
             method: "DELETE",
-            url: `http://localhost:3004/api/product/${productId}`
+            url: `http://localhost:3004/api/product/${productId}`,
+            headers: {
+                "authorization": authorization,
+                "user-id": userId
+            }
         })
     }
 }
 
 export const searchProduct = (data) => {
+    const authorization = localStorage.getItem('token');
+    const userId = localStorage.getItem("user-id");
     return {
         type: 'SEARCH_PRODUCT',
         payload: axios({
             method: "GET",
-            url: `http://localhost:3004/api/product/?search=${data}`
+            url: `http://localhost:3004/api/product/?search=${data}`,
+            headers: {
+                "authorization": authorization,
+                "user-id": userId
+            }
         })
     }
 }

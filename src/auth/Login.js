@@ -17,18 +17,18 @@ class Login extends Component {
         }
     }
 
-    onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
+    onChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
     }
 
-    onSubmit = (e) => {
-        e.preventDefault();
+    onSubmit = (event) => {
+        event.preventDefault();
         //console.log('hahaa');
 
         axios
             .post("http://localhost:3004/api/user/login", this.state)
             .then(res => {
-                // console.log(res.data);
+                //console.log(res.data);
                 localStorage.setItem('token', res.data.result.token);
                 localStorage.setItem('user-id', res.data.result.id);
                 localStorage.setItem('name', res.data.result.name);
