@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Form, Container, Row, Col, Button, Table } from 'react-bootstrap';
+import { Container, Row, Col, Button, Table } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { readProduct, searchProduct } from '../redux/actions/product';
+import { readProduct } from '../redux/actions/product';
 
 import Item from '../components/modal/product/Item';
 import Add from '../components/modal/product/Add';
 import Edit from '../components/modal/product/Edit';
 import Delete from '../components/modal/product/Delete';
+import Navbar from "../components/Navbar";
 
 class Product extends Component {
   state = {
@@ -29,10 +30,6 @@ class Product extends Component {
 
   readProduct() {
     this.props.dispatch(readProduct());
-  }
-
-  searchProduct = event => {
-    this.props.dispatch(searchProduct(event.target.value));
   }
 
   onShowAdd = (event) => {
@@ -85,11 +82,19 @@ class Product extends Component {
     })
   }
 
+  onLogout() {
+    localStorage.removeItem('user-id');
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAuth');
+    this.props.history.push('/login');
+  }
+
   render() {
     const { products } = this.props;
     const listproducts = products.map((product, index) => <Item key={index} product={product} onSelectProductEdit={this.onSelectProductEdit} onSelectProductDelete={this.onSelectProductDelete} />);
     return (
       <Fragment>
+        <Navbar onClick={this.onLogout.bind(this)} />
         <Container>
           <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
             <Col sm={10}>
@@ -97,15 +102,6 @@ class Product extends Component {
             </Col>
             <Col sm={2}>
               <Button variant="primary" size="sm" onClick={this.onShowAdd}>ADD PRODUCT</Button>
-            </Col>
-          </Row>
-          <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
-            <Col sm={12}>
-              <Form>
-                <Form.Group>
-                  <Form.Control type="search" placeholder="Name.." onChange={this.searchProduct} />
-                </Form.Group>
-              </Form>
             </Col>
           </Row>
           <Row>

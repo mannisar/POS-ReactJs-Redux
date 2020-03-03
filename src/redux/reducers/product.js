@@ -70,15 +70,15 @@ const product = (state = initialState, action) => {
                 products: newProductAfterDelete
             }
 
-        case 'SEARCH_PRODUCT_PENDING':
+        case 'FILTER_PRODUCT_PENDING':
             return {
                 ...state
             }
-        case 'SEARCH_PRODUCT_REJECTED':
+        case 'FILTER_PRODUCT_REJECTED':
             return {
                 ...state
             }
-        case 'SEARCH_PRODUCT_FULFILLED':
+        case 'FILTER_PRODUCT_FULFILLED':
             return {
                 ...state,
                 products: action.payload.data.result

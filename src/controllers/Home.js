@@ -5,23 +5,18 @@ import Navbar from "../components/Navbar";
 import Cart from "./Cart";
 
 import { connect } from "react-redux"
-import { readProduct, searchProduct } from "../redux/actions/product"
 
 class Home extends Component {
+    onSetCart = (item) => {
+        this.setState({
+            cart: item
+        })
+    }
+
     componentDidMount() {
         if (!localStorage.getItem('isAuth')) {
             this.props.history.push('/login');
-        } else {
-            this.readProduct()
         }
-    }
-
-    readProduct() {
-        this.props.dispatch(readProduct())
-    }
-
-    searchProduct = (event) => {
-        this.props.dispatch(searchProduct(event.target.value))
     }
 
     onLogout() {
@@ -32,13 +27,12 @@ class Home extends Component {
     }
 
     render() {
-        const { products } = this.props;
         return (
             <Fragment>
                 <div className="row">
                     <div className="col-md-9" id="col_posts">
-                        <Navbar onChange={this.searchProduct.bind(this)} onClick={this.onLogout.bind(this)} />
-                        <Card products={products} />
+                        <Navbar onClick={this.onLogout.bind(this)} />
+                        <Card />
                     </div>
                     <div className="col-md-3" id="col_posts">
                         <Cart />
@@ -49,10 +43,4 @@ class Home extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        products: state.products.products
-    }
-}
-
-export default withRouter(connect(mapStateToProps)(Home));
+export default withRouter(connect()(Home));

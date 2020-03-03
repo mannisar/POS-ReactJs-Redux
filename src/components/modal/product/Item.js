@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Button } from 'react-bootstrap';
 
-const Item = ({ product, onSelectProductEdit, onSelectProductDelete }) => {
+const Item = ({ product, category, onSelectProductEdit, onSelectProductDelete }) => {
 
     const onClickEdit = (event) => {
         event.preventDefault();

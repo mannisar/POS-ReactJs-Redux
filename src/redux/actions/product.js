@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export const createProduct = (data) => {
     const authorization = localStorage.getItem('token');
     const userId = localStorage.getItem("user-id");
@@ -67,14 +66,14 @@ export const deleteProduct = (productId) => {
     }
 }
 
-export const searchProduct = (data) => {
+export const filterProduct = (category, search) => {
     const authorization = localStorage.getItem('token');
     const userId = localStorage.getItem("user-id");
     return {
-        type: 'SEARCH_PRODUCT',
+        type: 'FILTER_PRODUCT',
         payload: axios({
             method: "GET",
-            url: `http://localhost:3004/api/product/?search=${data}`,
+            url: `http://localhost:3004/api/product/?category=${category}&search=${search}`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId
