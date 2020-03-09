@@ -1,28 +1,19 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import Card from "../components/Card";
+//import Pagination from "../components/Pagination"
 import Navbar from "../components/Navbar";
 import Cart from "./Cart";
 
 import { connect } from "react-redux"
 
 class Home extends Component {
-    onSetCart = (item) => {
-        this.setState({
-            cart: item
-        })
-    }
-
-    componentDidMount() {
-        if (!localStorage.getItem('isAuth')) {
-            this.props.history.push('/login');
-        }
-    }
 
     onLogout() {
         localStorage.removeItem('user-id');
+        localStorage.removeItem('role');
         localStorage.removeItem('token');
-        localStorage.removeItem('isAuth');
+        localStorage.removeItem('name');
         this.props.history.push('/login');
     }
 
@@ -33,8 +24,9 @@ class Home extends Component {
                     <div className="col-md-9" id="col_posts">
                         <Navbar onClick={this.onLogout.bind(this)} />
                         <Card />
+                        {/* <Pagination /> */}
                     </div>
-                    <div className="col-md-3" id="col_posts">
+                    <div className="col-md-3" id="col_carts">
                         <Cart />
                     </div>
                 </div>
@@ -43,4 +35,10 @@ class Home extends Component {
     }
 }
 
-export default withRouter(connect()(Home));
+const mapStateToProps = (state) => {
+    return {
+        categorys: state.categorys.categorys
+    }
+}
+
+export default withRouter(connect(mapStateToProps)(Home));

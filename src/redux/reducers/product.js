@@ -1,5 +1,6 @@
 const initialState = {
-    products: []
+    products: [],
+    // paginates: []
 }
 
 const product = (state = initialState, action) => {
@@ -13,10 +14,9 @@ const product = (state = initialState, action) => {
                 ...state
             }
         case 'CREATE_PRODUCT_FULFILLED':
-            const newProduct = [...state.products, action.payload.data.result]
             return {
                 ...state,
-                products: newProduct
+                products: action.payload.data.result
             }
 
         case 'READ_PRODUCT_PENDING':
@@ -44,15 +44,9 @@ const product = (state = initialState, action) => {
             }
 
         case 'UPDATE_PRODUCT_FULFILLED':
-            const newProductAfterUpdate = state.products.map(product => {
-                if (product.id === action.payload.data.result.id) {
-                    return action.payload.data.result;
-                }
-                return product;
-            })
             return {
                 ...state,
-                products: newProductAfterUpdate
+                products: action.payload.data.result
             }
 
         case 'DELETE_PRODUCT_PENDING':
@@ -64,25 +58,52 @@ const product = (state = initialState, action) => {
                 ...state
             }
         case 'DELETE_PRODUCT_FULFILLED':
-            const newProductAfterDelete = state.products.filter(product => product.id !== action.payload.data.result)
-            return {
-                ...state,
-                products: newProductAfterDelete
-            }
-
-        case 'FILTER_PRODUCT_PENDING':
-            return {
-                ...state
-            }
-        case 'FILTER_PRODUCT_REJECTED':
-            return {
-                ...state
-            }
-        case 'FILTER_PRODUCT_FULFILLED':
             return {
                 ...state,
                 products: action.payload.data.result
             }
+
+        case 'DETAIL_PRODUCT_PENDING':
+            return {
+                ...state
+            }
+        case 'DETAIL_PRODUCT_REJECTED':
+            return {
+                ...state
+            }
+        case 'DETAIL_PRODUCT_FULFILLED':
+            return {
+                ...state,
+                products: action.payload.data.result
+            }
+
+        // case 'FILTER_PRODUCT_PENDING':
+        //     return {
+        //         ...state
+        //     }
+        // case 'FILTER_PRODUCT_REJECTED':
+        //     return {
+        //         ...state
+        //     }
+        // case 'FILTER_PRODUCT_FULFILLED':
+        //     return {
+        //         ...state,
+        //         products: action.payload.data.result
+        //     }
+
+        // case 'PAGINATE_PRODUCT_PENDING':
+        //     return {
+        //         ...state
+        //     }
+        // case 'PAGINATE_PRODUCT_REJECTED':
+        //     return {
+        //         ...state
+        //     }
+        // case 'PAGINATE_PRODUCT_FULFILLED':
+        //     return {
+        //         ...state,
+        //         products: action.payload.data.pagination
+        //     }
         default:
             return state;
     }

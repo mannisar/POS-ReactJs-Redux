@@ -15,11 +15,7 @@ class Edit extends Component {
         categoryId: "" || "DEFAULT"
     }
 
-    componentWillReceiveProps({ product }) {
-        this.onSetValue(product);
-    }
-
-    onSetValue = (product) => {
+    componentWillReceiveProps = ({ product }) => {
         this.setState({
             productId: product.id,
             name_product: product.name_product,
@@ -66,8 +62,7 @@ class Edit extends Component {
     }
 
     render() {
-        //console.log(this.state)
-        const { show, onHide } = this.props
+        const { show, onHide, categorys } = this.props
         return (
             <Modal show={show} onHide={onHide}>
                 <Modal.Header closeButton>
@@ -93,11 +88,13 @@ class Edit extends Component {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>CATEGORY</Form.Label>
-                            <Form.Control type="text" placeholder="Enter Category" defaultValue={"DEFAULT"} name="categoryId" onChange={this.onChangeValue} value={this.state.categoryId} as="select">
+                            <Form.Control type="text" name="categoryId" onChange={this.onChangeValue} defaultValue={this.state.categoryId} as="select">
                                 <option value="DEFAULT" disabled>Choose..</option>
-                                <option value="1">Food</option>
-                                <option value="2">Drink</option>
-                                <option value="3">Cake</option>
+                                {categorys.map((category) =>
+                                    <option key={category.id} value={category.id}>
+                                        {category.name_category}
+                                    </option>
+                                )}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group>

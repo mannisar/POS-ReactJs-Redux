@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Table } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 import { readProduct } from '../redux/actions/product';
+import { readCategory } from '../redux/actions/category'
 
 import Item from '../components/modal/product/Item';
 import Add from '../components/modal/product/Add';
@@ -13,23 +14,20 @@ import Navbar from "../components/Navbar";
 
 class Product extends Component {
   state = {
+    category: "",
+    product: "",
+    by: "",
+    filter: true,
     showAdd: false,
     showEdit: false,
     showDelete: false,
-    selectProductEdit: null,
-    selectProductDelete: null
+    selectProductEdit: [],
+    selectProductDelete: []
   }
 
   componentDidMount() {
-    if (!localStorage.getItem('isAuth')) {
-      this.props.history.push('/login');
-    } else {
-      this.readProduct();
-    }
-  }
-
-  readProduct() {
-    this.props.dispatch(readProduct());
+    this.props.dispatch(readProduct(this.state.category, this.state.product, this.state.by))
+    this.props.dispatch(readCategory())
   }
 
   onShowAdd = (event) => {
@@ -84,17 +82,18 @@ class Product extends Component {
 
   onLogout() {
     localStorage.removeItem('user-id');
+    localStorage.removeItem('role');
     localStorage.removeItem('token');
-    localStorage.removeItem('isAuth');
+    localStorage.removeItem('name');
     this.props.history.push('/login');
   }
 
   render() {
-    const { products } = this.props;
+    const { products, categorys } = this.props;
     const listproducts = products.map((product, index) => <Item key={index} product={product} onSelectProductEdit={this.onSelectProductEdit} onSelectProductDelete={this.onSelectProductDelete} />);
     return (
       <Fragment>
-        <Navbar onClick={this.onLogout.bind(this)} />
+        <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
         <Container>
           <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
             <Col sm={10}>
@@ -108,10 +107,10 @@ class Product extends Component {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>ID: UNIQ</th>
+                  <th>ID</th>
                   <th>NAME</th>
                   <th>DESCRIPTION</th>
-                  <th>IMAGE: URL</th>
+                  <th>IMAGE</th>
                   <th>PRICE</th>
                   <th>STOCK</th>
                   <th>CATEGORY</th>
@@ -123,8 +122,8 @@ class Product extends Component {
               </tbody>
             </Table>
           </Row>
-          <Add show={this.state.showAdd} onHide={this.onCloseAdd} />
-          <Edit show={this.state.showEdit} onHide={this.onCloseEdit} product={this.state.selectProductEdit} />
+          <Add show={this.state.showAdd} onHide={this.onCloseAdd} categorys={categorys} />
+          <Edit show={this.state.showEdit} onHide={this.onCloseEdit} product={this.state.selectProductEdit} categorys={categorys} />
           <Delete show={this.state.showDelete} onHide={this.onCloseDelete} product={this.state.selectProductDelete} />
         </Container>
       </Fragment>
@@ -133,8 +132,10 @@ class Product extends Component {
 }
 
 const mapStateToProps = (state) => {
+
   return {
-    products: state.products.products
+    products: state.products.products,
+    categorys: state.categorys.categorys
   }
 }
 

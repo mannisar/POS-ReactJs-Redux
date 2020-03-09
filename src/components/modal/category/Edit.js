@@ -43,7 +43,7 @@ class Edit extends Component {
                     <Form onSubmit={this.updateCategory}>
                         <Form.Group>
                             <Form.Label>NAME</Form.Label>
-                            <Form.Control type="text" placeholder="Enter Name" name="name_category" onChange={this.onChangeValue} />
+                            <Form.Control type="text" placeholder="Enter Name" name="name_category" onChange={this.onChangeValue} value={this.state.name_category} />
                         </Form.Group>
                         <Button variant="primary" type="submit">
                             SUBMIT

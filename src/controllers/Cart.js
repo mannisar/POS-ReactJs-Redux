@@ -1,65 +1,37 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col, Button, Modal } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import { Row, Col, Button, Modal, Form } from 'react-bootstrap';
 
 import { connect } from 'react-redux'
-// import ItemCart from './CartItem';
+import { addQty, reduceQty, deleteCart, cancleCart } from '../redux/actions/cart'
+import { orderCheckout } from '../redux/actions/order'
+
+import Item from '../components/modal/cart/Item'
+import uuid from 'uniqid'
 
 class Cart extends Component {
-    constructor(props) {
-        super(props);
+    state = {
+        show: false,
+        count: 0,
+        id: parseInt(localStorage.getItem('user-id')),
+        name: localStorage.getItem('name'),
+        id_order: `${uuid()}`
+    };
 
-        this.state = {
-            carts: [],
-            total: null,
-            show: false
-        };
+    onAddQty = (id) => {
+        this.props.dispatch(addQty(id))
     }
 
-    componentWillReceiveProps({ carts }) {
-
-        const total = this.state.total + carts.price;
-        carts.qty = 1;
-        this.state.carts.push(carts);
-
-        this.setState({
-            carts: this.state.carts,
-            total: total
-        })
-
-        console.log('will receive props')
+    onReduceQty = (id) => {
+        this.props.dispatch(reduceQty(id))
     }
 
-    onAddQty = (carts) => {
-        carts.qty = carts.qty + 1;
-        const total = this.state.total + carts.price
-
-        this.setState(nextState => ({
-            carts: nextState.carts,
-            total: total
-        }))
+    onDeleteCart = (id) => {
+        this.props.dispatch(deleteCart(id))
     }
 
-    onReduceQty = (carts) => {
-        if (carts.qty > 1) {
-            carts.qty = carts.qty - 1;
-            const total = this.state.total - carts.price;
-
-            this.setState(nextState => ({
-                carts: nextState.carts,
-                total: total
-            }))
-        }
-    }
-
-    onDeleteItem = (carts) => {
-        const filterCartArray = this.state.carts.filter(item => item !== carts);
-        const totalItem = carts.price * carts.qty;
-        const total = this.state.total - totalItem;
-
-        this.setState({
-            carts: filterCartArray,
-            total: total
-        })
+    onCancleCart = (data) => {
+        this.props.dispatch(cancleCart(data))
     }
 
     handleShow = () => {
@@ -68,115 +40,127 @@ class Cart extends Component {
         })
     }
 
-    handleClose = () => {
+    handleClose = (event) => {
         this.setState({
             show: false
         })
     }
 
+    pushClose = (event) => {
+        event.preventDefault()
+        this.props.history.push('/history')
+    }
+
+    orderCheckout = (event) => {
+        event.preventDefault()
+        this.setState({
+            show: true
+        })
+        const data = {
+            id_user: this.state.id,
+            total: this.props.total,
+            id_order: this.state.id_order,
+            product: this.props.carts
+        }
+        this.props.dispatch(orderCheckout(data))
+    }
 
     render() {
-        const { carts } = this.props;
-        console.log('render');
-        // console.log(carts);
-        // const itemCart = items.map((items, index) => {
-        //     return (
-        //         <ItemCart cart={items} key={index} addQty={this.onAddQty} reduceQty={this.onReduceQty} deleteItem={this.onDeleteItem} />
-        //     )
-        // });
-        // const itemCheckout = items.map((cart, index) => {
-        //     return (
-        //         <Row key={index}>
-        //             <Col>{cart.name_product} {cart.stock} x</Col>
-        //             <Col>Rp. {cart.stock * cart.price}</Col>
-        //         </Row>
-        //     );
-        // })
-
-        return (
-            <Fragment>
-                <nav
-                    className="navbar navbar-light bg-white"
-                    style={{ paddingLeft: "9rem" }}
-                >
-                    <span className="navbar-text">
-                        Cart:
-                    {/* <span className={this.getBadgeClasses()}>{this.formatCart()}</span> */}
-                    </span>
-                </nav>
-                <div>
-                    {carts.length ?
-                        <div>
-                            {/* <div style={{ width: '100%', height: "620px" }}> */}
-
-                            <div className="row">
-                                {carts.map((cart, index) => (
-                                    <Fragment>
-                                        <div className="col-md-4" id="col_posts" key={index}>
-                                            <img src={cart.image} style={{ width: 80, height: 80 }} />
-                                        </div>
-                                        <div className="col-md-4" id="col_posts">
-                                            <p>{cart.name_product}</p>
-                                            <div className="col-sm-4" id="col_posts">
-                                                <button className="btn btn-primary" onClick={this.onReduceQty}>-</button>
-                                            </div>
-                                            <div className="col-sm-2" id="col_posts" style={{ margin: 6 }}>{cart.qty}</div>
-                                            <div className="col-sm-4" id="col_posts">
-                                                <button className="btn btn-primary" onClick={this.onAddQty}>+</button>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4" id="col_posts">
-                                            <p> Rp. {cart.price}</p>
-                                            <button className="btn btn-primary" style={{ marginTop: 30 }} onClick={this.onDeleteItem}>Remove</button>
-                                        </div>
-                                    </Fragment>
-                                ))}
+        const { carts, total } = this.props;
+        const listCart = carts.map((product, index) => {
+            return (
+                <Item key={index} product={product} AddQty={this.onAddQty} ReduceQty={this.onReduceQty} DeleteCart={this.onDeleteCart} />
+            )
+        })
+        const itemCheckout = carts.map((product, index) => {
+            return (
+                <Row style={{ marginBottom: "15px", borderLeft: "dashed" }} key={index}>
+                    <Col>{product.name_product} {product.qty}x <span style={{ fontWeight: "bolder" }}>{product.price}</span></Col>
+                </Row>
+            );
+        })
+        const CartMenu = () => {
+            if (carts.length <= 0) {
+                return (
+                    <Fragment>
+                        <img src="/Cart.png" alt="" style={{ width: "100%", maxHeight: "100%" }} />
+                    </Fragment>
+                )
+            } else {
+                return (
+                    <Fragment>
+                        <div className="rowCart scrollCart">
+                            <div className="col-3 mr-auto" style={{ margin: 0, padding: 0, flex: "none", maxWidth: "none" }}>
+                                {listCart}
                             </div>
-                            <Row style={{ fontWeight: "bold" }}>
-                                <Col sm={6} style={{ fontSize: "25px" }}>Total: </Col>
-                                <Col sm={6} style={{ fontSize: "25px" }}>Rp. {this.state.total}</Col>
-                            </Row>
-                            <p style={{ marginTop: "10px", marginBottom: "10px" }}>* Belum Termasuk ppn</p>
-                            <Row className="justify-content-md-center" style={{ marginBottom: "10px" }}>
-                                <Col sm={12}>
-                                    <Button size="sm" variant="info" style={{ width: "100%" }} onClick={this.handleShow} >Checkout</Button>
-                                </Col>
-                            </Row>
-                            <Row className="justify-content-md-center">
-                                <Col sm={12}>
-                                    <Button size="sm" variant="info" style={{ width: "100%" }} >Cancel</Button>
-                                </Col>
-                            </Row>
-
+                            <div className="col-9" style={{ margin: 0, padding: 0, flex: "none", maxWidth: "none" }}>
+                                <Form onSubmit={this.orderCheckout}>
+                                    <Row style={{ fontWeight: "bold", marginTop: "10px" }}>
+                                        <Col sm={6} style={{ fontSize: 20 }}>Total: </Col>
+                                        <Col sm={6} style={{ fontSize: 20 }}>Rp. {total}</Col>
+                                    </Row>
+                                    <p style={{ marginTop: "10px", marginBottom: "10px" }}>* Belum Termasuk ppn</p>
+                                    <Row className="justify-content-md-center">
+                                        <Col sm={12}>
+                                            <button className="btn btn" style={{ width: "100%" }} type="submit">Checkout</button>
+                                        </Col>
+                                    </Row>
+                                    <Row className="justify-content-md-center">
+                                        <Col sm={12}>
+                                            <button className="btn btn" style={{ width: "100%" }} onClick={() => (this.onCancleCart(carts))} type="button">Cancel</button>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </div>
                             <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                                 <Modal.Body>
                                     <Row>
-                                        <Col style={{ fontSize: "17px" }}>Checkout</Col>
-                                        <Col style={{ fontSize: "17px" }}>Receipt no: #0102314321213</Col>
+                                        <Col style={{ fontSize: "17px", marginBottom: "15px" }}>Checkout</Col>
+                                        <Col style={{ fontSize: "17px" }}>Receipt no: {this.state.id_order}</Col>
                                     </Row>
-                                    <p style={{ marginBottom: "30px" }}>Cashier: Pevita Pearce</p>
-                                    {/* {itemCheckout} */}
-                                    <p>Total: Rp. {this.state.total}</p>
+                                    {itemCheckout}
+                                    <Row>
+                                        <p>
+                                            <span style={{ fontSize: "17px", marginRight: "100px" }}>Cashier: {this.state.name}</span>
+                                            Total: Rp.
+                                            <span style={{ fontWeight: "bolder" }}>{total}</span>
+                                        </p>
+                                    </Row>
                                 </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={this.handleClose}>Close</Button>
-                                    <Button variant="primary" onClick={this.handleClose}>Save Changes</Button>
+                                <Modal.Footer style={{ display: "block" }}>
+                                    <Button variant="primary" onClick={this.handleClose}>Close</Button>
+                                    <Button style={{ float: "right" }} variant="primary" type="submit" onClick={this.pushClose}>History</Button>
                                 </Modal.Footer>
                             </Modal>
                         </div>
-                        : null}
-                </div>
-            </Fragment>
+                    </Fragment >
+                )
+            }
+        }
+        return (
+            <Fragment>
+                <nav className="navbar navbar-light bg-white" style={{ paddingLeft: "9rem" }}>
+                    <span className="navbar-text">
+                        Cart: <span className={this.getBadgeClasses()}>{carts.length}</span>
+                    </span>
+                </nav>
+                <CartMenu />
+            </Fragment >
         )
+    }
+    getBadgeClasses() {
+        let classes = "badge badge-";
+        classes += this.state.count === this.props.carts.length ? "danger" : "info";
+        return classes;
     }
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state)
     return {
-        carts: state.carts.carts
-        //cart: state.items
+        carts: state.carts.carts,
+        orders: state.carts.orders,
+        total: state.carts.total
     }
 }
 
-export default connect(mapStateToProps)(Cart);
+export default withRouter(connect(mapStateToProps)(Cart));

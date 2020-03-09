@@ -31,8 +31,8 @@ class Login extends Component {
                 //console.log(res.data);
                 localStorage.setItem('token', res.data.result.token);
                 localStorage.setItem('user-id', res.data.result.id);
+                localStorage.setItem('role', res.data.result.role);
                 localStorage.setItem('name', res.data.result.name);
-                localStorage.setItem('isAuth', true);
                 this.props.history.push('/');
             })
             .catch(err => {
@@ -56,9 +56,9 @@ class Login extends Component {
                                 <input type="password" className="form-control" placeholder="Enter password" name="password" onChange={this.onChange} />
                             </div>
                             <button type="submit" className="btn btn-primary" style={{
-                                backgroundColor: '#fa7578!important',
-                                width: 275,
-                                marginLeft: 220
+                                backgroundColor: '#f0bbcb!important',
+                                color: "white",
+                                width: "100%",
                             }}>Login</button>
                         </form>
                     </div>

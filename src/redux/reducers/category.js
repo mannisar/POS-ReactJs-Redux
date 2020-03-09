@@ -13,10 +13,9 @@ const category = (state = initialState, action) => {
                 ...state
             }
         case 'CREATE_CATEGORY_FULFILLED':
-            const newCategory = [...state.categorys, action.payload.data.result]
             return {
                 ...state,
-                categorys: newCategory
+                categorys: action.payload.data.result
             }
 
         case 'READ_CATEGORY_PENDING':
@@ -44,15 +43,9 @@ const category = (state = initialState, action) => {
             }
 
         case 'UPDATE_CATEGORY_FULFILLED':
-            const newCategoryAfterUpdate = state.categorys.map(category => {
-                if (category.id === action.payload.data.result.id) {
-                    return action.payload.data.result;
-                }
-                return category;
-            })
             return {
                 ...state,
-                categorys: newCategoryAfterUpdate
+                categorys: action.payload.data.result
             }
 
         case 'DELETE_CATEGORY_PENDING':
@@ -64,10 +57,9 @@ const category = (state = initialState, action) => {
                 ...state
             }
         case 'DELETE_CATEGORY_FULFILLED':
-            const newCategoryAfterDelete = state.categorys.filter(category => category.id !== action.payload.data.result)
             return {
                 ...state,
-                categorys: newCategoryAfterDelete
+                categorys: action.payload.data.result
             }
 
         case 'SEARCH_CATEGORY_PENDING':

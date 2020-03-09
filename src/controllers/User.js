@@ -3,26 +3,26 @@ import { withRouter } from 'react-router-dom';
 import { Container, Row, Col, Button, Table } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { readCategory } from '../redux/actions/category';
+import { readUser } from '../redux/actions/user';
 
 import Navbar from "../components/Navbar";
-import Item from '../components/modal/category/Item';
-import Add from '../components/modal/category/Add';
-import Edit from '../components/modal/category/Edit'
-import Delete from '../components/modal/category/Delete'
+import Item from '../components/modal/user/Item';
+import Add from '../components/modal/user/Add';
+import Edit from '../components/modal/user/Edit'
+import Delete from '../components/modal/user/Delete'
 
-class Category extends Component {
+class User extends Component {
     state = {
         filter: true,
         showAdd: false,
         showEdit: false,
         showDelete: false,
-        selectCategoryEdit: [],
-        selectCategoryDelete: []
+        selectUserEdit: [],
+        selectUserDelete: []
     }
 
     componentDidMount() {
-        this.props.dispatch(readCategory())
+        this.props.dispatch(readUser())
     }
 
     onShowAdd = event => {
@@ -49,9 +49,9 @@ class Category extends Component {
         })
     }
 
-    onSelectCategoryEdit = category => {
+    onSelectUserEdit = user => {
         this.setState({
-            selectCategoryEdit: category,
+            selectUserEdit: user,
             showEdit: true
         })
     }
@@ -68,34 +68,34 @@ class Category extends Component {
         })
     }
 
-    onSelectCategoryDelete = category => {
+    onSelectUserDelete = user => {
         this.setState({
-            selectCategoryDelete: category,
+            selectUserDelete: user,
             showDelete: true
         })
     }
 
     onLogout() {
         localStorage.removeItem('user-id');
-        localStorage.removeItem('id_level');
+        localStorage.removeItem('role');
         localStorage.removeItem('token');
         localStorage.removeItem('name');
         this.props.history.push('/login');
     }
 
     render() {
-        const { categorys } = this.props;
-        const listcategorys = categorys.map((category, index) => <Item key={index} category={category} onSelectCategoryEdit={this.onSelectCategoryEdit} onSelectCategoryDelete={this.onSelectCategoryDelete} />)
+        const { users } = this.props;
+        const listusers = users.map((user, index) => <Item key={index} user={user} onSelectUserEdit={this.onSelectUserEdit} onSelectUserDelete={this.onSelectUserDelete} />)
         return (
             <Fragment>
                 <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
                 <Container>
                     <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                         <Col sm={10}>
-                            <h4>CATEGORY</h4>
+                            <h4>USER</h4>
                         </Col>
                         <Col sm={2}>
-                            <Button variant="primary" size="sm" onClick={this.onShowAdd}>ADD CATEGORY</Button>
+                            <Button variant="primary" size="sm" onClick={this.onShowAdd}>ADD USER</Button>
                         </Col>
                     </Row>
                     <Row>
@@ -104,27 +104,29 @@ class Category extends Component {
                                 <tr>
                                     <th>ID</th>
                                     <th>NAME</th>
+                                    <th>EMAIL</th>
+                                    <th>ROLE</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {listcategorys}
+                                {listusers}
                             </tbody>
                         </Table>
                     </Row>
                     <Add show={this.state.showAdd} onHide={this.onCloseAdd} />
-                    <Edit show={this.state.showEdit} onHide={this.onCloseEdit} category={this.state.selectCategoryEdit} />
-                    <Delete show={this.state.showDelete} onHide={this.onCloseDelete} category={this.state.selectCategoryDelete} />
+                    <Edit show={this.state.showEdit} onHide={this.onCloseEdit} user={this.state.selectUserEdit} />
+                    <Delete show={this.state.showDelete} onHide={this.onCloseDelete} user={this.state.selectUserDelete} />
                 </Container>
             </Fragment>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        categorys: state.categorys.categorys
+        users: state.users.users
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Category));
+export default withRouter(connect(mapStateToProps)(User));

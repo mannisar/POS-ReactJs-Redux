@@ -17,14 +17,14 @@ export const createProduct = (data) => {
     }
 }
 
-export const readProduct = () => {
+export const readProduct = (category, product, by) => {
     const authorization = localStorage.getItem('token');
     const userId = localStorage.getItem("user-id");
     return {
         type: 'READ_PRODUCT',
         payload: axios({
             method: "GET",
-            url: "http://localhost:3004/api/product",
+            url: `http://localhost:3004/api/product/?category=${category}&product=${product}&sortBy=${by}`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId
@@ -66,14 +66,14 @@ export const deleteProduct = (productId) => {
     }
 }
 
-export const filterProduct = (category, search) => {
+export const detailProduct = (id) => {
     const authorization = localStorage.getItem('token');
     const userId = localStorage.getItem("user-id");
     return {
-        type: 'FILTER_PRODUCT',
+        type: 'DETAIL_PRODUCT',
         payload: axios({
             method: "GET",
-            url: `http://localhost:3004/api/product/?category=${category}&search=${search}`,
+            url: `http://localhost:3004/api/product${id}`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId
@@ -81,3 +81,35 @@ export const filterProduct = (category, search) => {
         })
     }
 }
+
+// export const filterProduct = (category, product, by) => {
+//     const authorization = localStorage.getItem('token');
+//     const userId = localStorage.getItem("user-id");
+//     return {
+//         type: 'FILTER_PRODUCT',
+//         payload: axios({
+//             method: "GET",
+//             url: `http://localhost:3004/api/product/?category=${category}&product=${product}&sortBy=${by}`,
+//             headers: {
+//                 "authorization": authorization,
+//                 "user-id": userId
+//             }
+//         })
+//     }
+// }
+
+// export const paginateProduct = (event) => {
+//     const authorization = localStorage.getItem('token');
+//     const userId = localStorage.getItem("user-id");
+//     return {
+//         type: 'PAGINATE_PRODUCT',
+//         payload: axios({
+//             method: "GET",
+//             url: `http://localhost:3004/api/product?paginateId=${event}`,
+//             headers: {
+//                 "authorization": authorization,
+//                 "user-id": userId
+//             }
+//         })
+//     }
+// }

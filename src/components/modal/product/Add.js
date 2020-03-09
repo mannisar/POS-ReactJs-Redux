@@ -43,7 +43,7 @@ class Add extends Component {
     }
 
     render() {
-        const { show, onHide } = this.props
+        const { show, onHide, categorys } = this.props
         return (
             <Modal show={show} onHide={onHide}>
                 <Modal.Header closeButton>
@@ -71,9 +71,11 @@ class Add extends Component {
                             <Form.Label>CATEGORY</Form.Label>
                             <Form.Control type="text" placeholder="Enter Category" defaultValue={"DEFAULT"} name="categoryId" onChange={this.onChangeValue} as="select">
                                 <option value="DEFAULT" disabled>Choose..</option>
-                                <option value="1">Food</option>
-                                <option value="2">Drink</option>
-                                <option value="3">Cake</option>
+                                {categorys.map((category) =>
+                                    <option key={category.id} value={category.id}>
+                                        {category.name_category}
+                                    </option>
+                                )}
                             </Form.Control>
                         </Form.Group>
                         <Form.Group>
@@ -89,7 +91,5 @@ class Add extends Component {
         );
     }
 }
-
-
 
 export default connect()(Add);
