@@ -31,6 +31,9 @@ class Cart extends Component {
     }
 
     onCancleCart = (data) => {
+        this.setState({
+            show: false
+        })
         this.props.dispatch(cancleCart(data))
     }
 
@@ -65,6 +68,13 @@ class Cart extends Component {
         this.props.dispatch(orderCheckout(data))
     }
 
+    convertToRupiah(angka) {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for (var i = 0; i < angkarev.length; i++) if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+        return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('') + ',-';
+    }
+
     render() {
         const { carts, total } = this.props;
         const listCart = carts.map((product, index) => {
@@ -75,7 +85,7 @@ class Cart extends Component {
         const itemCheckout = carts.map((product, index) => {
             return (
                 <Row style={{ marginBottom: "15px", borderLeft: "dashed" }} key={index}>
-                    <Col>{product.name_product} {product.qty}x <span style={{ fontWeight: "bolder" }}>{product.price}</span></Col>
+                    <Col>{product.name_product} {product.qty}x <span style={{ fontWeight: "bolder" }}>{this.convertToRupiah(product.price)}</span></Col>
                 </Row>
             );
         })
@@ -97,7 +107,7 @@ class Cart extends Component {
                                 <Form onSubmit={this.orderCheckout}>
                                     <Row style={{ fontWeight: "bold", marginTop: "10px" }}>
                                         <Col sm={6} style={{ fontSize: 20 }}>Total: </Col>
-                                        <Col sm={6} style={{ fontSize: 20 }}>Rp. {total}</Col>
+                                        <Col sm={6} style={{ fontSize: 20 }}>{this.convertToRupiah(total)}</Col>
                                     </Row>
                                     <p style={{ marginTop: "10px", marginBottom: "10px" }}>* Belum Termasuk ppn</p>
                                     <Row className="justify-content-md-center">
@@ -121,14 +131,13 @@ class Cart extends Component {
                                     {itemCheckout}
                                     <Row>
                                         <p>
-                                            <span style={{ fontSize: "17px", marginRight: "100px" }}>Cashier: {this.state.name}</span>
-                                            Total: Rp.
-                                            <span style={{ fontWeight: "bolder" }}>{total}</span>
+                                            <span style={{ fontSize: "17px", marginRight: "90px" }}>Cashier: {this.state.name}</span>
+                                            <span style={{ fontSize: "17px", fontStyle: "italic" }}>Total: {this.convertToRupiah(total)}</span>
                                         </p>
                                     </Row>
                                 </Modal.Body>
                                 <Modal.Footer style={{ display: "block" }}>
-                                    <Button variant="primary" onClick={this.handleClose}>Close</Button>
+                                    <Button variant="primary" onClick={() => (this.onCancleCart(carts))}>Close</Button>
                                     <Button style={{ float: "right" }} variant="primary" type="submit" onClick={this.pushClose}>History</Button>
                                 </Modal.Footer>
                             </Modal>

@@ -5,18 +5,12 @@ import { readProduct } from "../redux/actions/product"
 import { addToCart } from "../redux/actions/cart"
 
 class Card extends Component {
-  state = {
-    category: "",
-    product: "",
-    by: ""
-  }
-
   addToCart = (data) => {
     this.props.dispatch(addToCart(data))
   }
 
   componentDidMount() {
-    this.props.dispatch(readProduct(this.state.category, this.state.product, this.state.by))
+    this.props.dispatch(readProduct())
   }
 
   render() {

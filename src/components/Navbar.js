@@ -7,43 +7,79 @@ import { connect } from "react-redux";
 import { readProduct } from '../redux/actions/product'
 import { readCategory } from '../redux/actions/category'
 
+import querystring from 'query-string'
+
 class Navbar extends Component {
   state = {
     category: "",
     product: "",
-    by: ""
+    by: "",
+    paginateId: "",
   }
 
   onCategory = event => {
-    this.setState({
-      category: event.target.value
-    })
-    this.props.history.push(`/?category=${event.target.value}&product=${this.state.product}&by=${this.state.by}`)
-    this.props.dispatch(readProduct(event.target.value, this.state.product, this.state.by))
+    if (this.state.product !== "" && this.state.by !== "") {
+      this.props.history.push(`/?category=${event.target.value}&product=${this.state.product}&sortBy=${this.state.by}`)
+    } else if (this.state.product !== "") {
+      this.props.history.push(`/?category=${event.target.value}&product=${this.state.product}`)
+    } else if (this.state.by !== "") {
+      this.props.history.push(`/?category=${event.target.value}&sortBy=${this.state.by}`)
+    } else {
+      this.props.history.push(`/?category=${event.target.value}`)
+    }
+    this.props.dispatch(readProduct(event.target.value, this.state.product, this.state.by, this.state.paginateId))
   }
 
   onProduct = event => {
-    this.setState({
-      product: event.target.value
-    })
-    this.props.history.push(`/?category=${this.state.category}&product=${event.target.value}&by=${this.state.by}`)
-    this.props.dispatch(readProduct(this.state.category, event.target.value, this.state.by))
+    if (this.state.category !== "" && this.state.by !== "") {
+      this.props.history.push(`/?category=${this.state.category}&product=${event.target.value}&sortBy=${this.state.by}`)
+    } else if (this.state.category !== "") {
+      this.props.history.push(`/?category=${this.state.category}&product=${event.target.value}`)
+    } else if (this.state.by !== "") {
+      this.props.history.push(`/?product=${event.target.value}&sortBy=${this.state.by}`)
+    } else {
+      this.props.history.push(`/?product=${event.target.value}`)
+    }
+    this.props.dispatch(readProduct(this.state.category, event.target.value, this.state.by, this.state.paginateId))
   }
 
   onBy = event => {
-    this.setState({
-      by: event.target.value
-    })
-    this.props.history.push(`/?category=${this.state.category}&product=${this.state.product}&by=${event.target.value}`)
-    this.props.dispatch(readProduct(this.state.category, this.state.product, event.target.value))
+    if (this.state.category !== "" && this.state.product !== "") {
+      this.props.history.push(`/?category=${this.state.category}&product=${this.state.product}&sortBy=${event.target.value}`)
+    } else if (this.state.category !== "") {
+      this.props.history.push(`/?category=${this.state.category}&sortBy=${event.target.value}`)
+    } else if (this.state.product !== "") {
+      this.props.history.push(`/?product=${this.state.product}&sortBy=${event.target.value}`)
+    } else {
+      this.props.history.push(`/?sortBy=${event.target.value}`)
+    }
+    this.props.dispatch(readProduct(this.state.category, this.state.product, event.target.value, this.state.paginateId))
   }
 
   componentDidMount() {
     this.props.dispatch(readCategory())
+    var value = querystring.parse(this.props.location.search);
+    if (value.category !== undefined) {
+      const result = value.category
+      this.setState({
+        category: result
+      })
+    }
+    else if (value.product !== undefined) {
+      const result = value.product
+      this.setState({
+        product: result
+      })
+    } else if (value.by !== undefined) {
+      const result = value.by
+      this.setState({
+        by: result
+      })
+    }
   }
 
   render() {
-    const { show, onClick, categorys } = this.props;
+    const { hidden, onClick, categorys } = this.props;
     const fontAW = {
       cursor: "pointer",
       color: "#fa7578",
@@ -96,10 +132,10 @@ class Navbar extends Component {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <span className="navbar-text" style={{ fontSize: 16, color: 'black' }}>
+          <span className="navbar-text" style={{ fontSize: 16, color: 'black' }} hidden={hidden}>
             CASHIERUN V1.5
             </span>
-          <fieldset disabled={show}>
+          <fieldset hidden={hidden}>
             <form className="form-inline">
               <div className="input-group">
                 <div className="input-group-prepend">
@@ -124,7 +160,7 @@ class Navbar extends Component {
                 <input
                   className="form-control"
                   style={{ border: "1px solid #ced4da" }}
-                  type="search"
+                  // type="search"
                   placeholder="Search"
                   aria-label="Search"
                   onChange={this.onProduct}

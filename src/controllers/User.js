@@ -13,7 +13,7 @@ import Delete from '../components/modal/user/Delete'
 
 class User extends Component {
     state = {
-        filter: true,
+        hidden: true,
         showAdd: false,
         showEdit: false,
         showDelete: false,
@@ -88,7 +88,7 @@ class User extends Component {
         const listusers = users.map((user, index) => <Item key={index} user={user} onSelectUserEdit={this.onSelectUserEdit} onSelectUserDelete={this.onSelectUserDelete} />)
         return (
             <Fragment>
-                <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
+                <Navbar onClick={this.onLogout.bind(this)} hidden={this.state.hidden} />
                 <Container>
                     <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                         <Col sm={10}>

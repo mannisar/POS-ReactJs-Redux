@@ -1,4 +1,5 @@
 import axios from 'axios';
+require('dotenv').config()
 
 export const createCategory = (data) => {
     const authorization = localStorage.getItem('token');
@@ -7,7 +8,7 @@ export const createCategory = (data) => {
         type: "CREATE_CATEGORY",
         payload: axios({
             method: "POST",
-            url: "http://localhost:3004/api/category",
+            url: `${process.env.REACT_APP_URL}category`,
             data: data,
             headers: {
                 "authorization": authorization,
@@ -24,7 +25,7 @@ export const readCategory = () => {
         type: "READ_CATEGORY",
         payload: axios({
             method: "GET",
-            url: "http://localhost:3004/api/category",
+            url: `${process.env.REACT_APP_URL}category`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId
@@ -40,7 +41,7 @@ export const updateCategory = (categoryId, data) => {
         type: 'UPDATE_CATEGORY',
         payload: axios({
             method: "PATCH",
-            url: `http://localhost:3004/api/category/${categoryId}`,
+            url: `${process.env.REACT_APP_URL}category/${categoryId}`,
             data: data,
             headers: {
                 "authorization": authorization,
@@ -57,7 +58,7 @@ export const deleteCategory = (categoryId) => {
         type: 'DELETE_CATEGORY',
         payload: axios({
             method: "DELETE",
-            url: `http://localhost:3004/api/category/${categoryId}`,
+            url: `${process.env.REACT_APP_URL}category/${categoryId}`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId
@@ -73,7 +74,7 @@ export const searchCategory = (data) => {
         type: 'SEARCH_CATEGORY',
         payload: axios({
             method: "GET",
-            url: `http://localhost:3004/api/category/${data}`,
+            url: `${process.env.REACT_APP_URL}category/${data}`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId

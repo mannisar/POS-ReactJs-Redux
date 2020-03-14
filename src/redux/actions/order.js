@@ -7,7 +7,7 @@ export const orderCheckout = (data) => {
         type: "ORDER_CHECKOUT",
         payload: axios({
             method: "POST",
-            url: 'http://localhost:3004/api/order',
+            url: `${process.env.REACT_APP_URL}order`,
             data: data,
             headers: {
                 "authorization": authorization,
@@ -24,7 +24,7 @@ export const readOrder = () => {
         type: "READ_ORDER",
         payload: axios({
             method: "GET",
-            url: 'http://localhost:3004/api/history',
+            url: `${process.env.REACT_APP_URL}history`,
             headers: {
                 "authorization": authorization,
                 "user-id": userId

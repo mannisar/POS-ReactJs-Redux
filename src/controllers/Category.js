@@ -13,7 +13,7 @@ import Delete from '../components/modal/category/Delete'
 
 class Category extends Component {
     state = {
-        filter: true,
+        hidden: true,
         showAdd: false,
         showEdit: false,
         showDelete: false,
@@ -88,7 +88,7 @@ class Category extends Component {
         const listcategorys = categorys.map((category, index) => <Item key={index} category={category} onSelectCategoryEdit={this.onSelectCategoryEdit} onSelectCategoryDelete={this.onSelectCategoryDelete} />)
         return (
             <Fragment>
-                <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
+                <Navbar onClick={this.onLogout.bind(this)} hidden={this.state.hidden} />
                 <Container>
                     <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                         <Col sm={10}>

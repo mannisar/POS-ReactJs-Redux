@@ -17,7 +17,7 @@ class Product extends Component {
     category: "",
     product: "",
     by: "",
-    filter: true,
+    hidden: true,
     showAdd: false,
     showEdit: false,
     showDelete: false,
@@ -93,7 +93,7 @@ class Product extends Component {
     const listproducts = products.map((product, index) => <Item key={index} product={product} onSelectProductEdit={this.onSelectProductEdit} onSelectProductDelete={this.onSelectProductDelete} />);
     return (
       <Fragment>
-        <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
+        <Navbar onClick={this.onLogout.bind(this)} hidden={this.state.hidden} />
         <Container>
           <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
             <Col sm={10}>

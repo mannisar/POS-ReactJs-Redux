@@ -92,31 +92,13 @@ const cart = (state = initialState, action) => {
         case 'CANCEL_CART_DATA':
             return {
                 ...state,
-                carts: []
+                carts: [],
+                total: 0
             }
 
         default:
             return state
     }
 }
-
-// let existedCart = state.carts.find(product => product.id === action.payload.id)
-// if (existedCart) {
-//     // action.payload.qty += 1
-//     return {
-//         ...state,
-//         total: state.total + action.payload.price
-//     }
-// }
-// else {
-//     action.payload.qty = 1
-//     // calculate total
-//     let newTotal = state.total + action.payload.price
-//     return {
-//         ...state,
-//         carts: [...state.carts, action.payload],
-//         total: newTotal
-//     }
-// }
 
 export default cart;

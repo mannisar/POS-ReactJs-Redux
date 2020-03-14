@@ -9,7 +9,7 @@ import Navbar from "../components/Navbar";
 
 class Order extends Component {
     state = {
-        filter: true
+        hidden: true
     }
 
     componentDidMount() {
@@ -28,7 +28,7 @@ class Order extends Component {
         const { orders } = this.props;
         return (
             <Fragment>
-                <Navbar onClick={this.onLogout.bind(this)} show={this.state.filter} />
+                <Navbar onClick={this.onLogout.bind(this)} hidden={this.state.hidden} />
                 <Container>
                     <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                         <Col sm={10}>

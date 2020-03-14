@@ -23,12 +23,10 @@ class Login extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
-        //console.log('hahaa');
 
         axios
             .post("http://localhost:3004/api/user/login", this.state)
             .then(res => {
-                //console.log(res.data);
                 localStorage.setItem('token', res.data.result.token);
                 localStorage.setItem('user-id', res.data.result.id);
                 localStorage.setItem('role', res.data.result.role);

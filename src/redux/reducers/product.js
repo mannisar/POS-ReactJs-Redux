@@ -1,6 +1,6 @@
 const initialState = {
     products: [],
-    // paginates: []
+    paginates: []
 }
 
 const product = (state = initialState, action) => {
@@ -28,9 +28,18 @@ const product = (state = initialState, action) => {
                 ...state
             }
         case 'READ_PRODUCT_FULFILLED':
+            // const page = state.paginates.map(pagination => {
+            //     if (pagination === action.payload.data.amount) {
+            //         return action.payload.data.result;
+            //     }
+            //     return pagination;
+            // })
+            // const page = action.payload.data.amount
+            // const page = state.products.filter(pagination => pagination !== action.payload.data.amount);
             return {
                 ...state,
-                products: action.payload.data.result
+                products: action.payload.data.result,
+                paginates: action.payload.data.amount
             }
 
         case 'UPDATE_PRODUCT_PENDING':
@@ -77,33 +86,6 @@ const product = (state = initialState, action) => {
                 products: action.payload.data.result
             }
 
-        // case 'FILTER_PRODUCT_PENDING':
-        //     return {
-        //         ...state
-        //     }
-        // case 'FILTER_PRODUCT_REJECTED':
-        //     return {
-        //         ...state
-        //     }
-        // case 'FILTER_PRODUCT_FULFILLED':
-        //     return {
-        //         ...state,
-        //         products: action.payload.data.result
-        //     }
-
-        // case 'PAGINATE_PRODUCT_PENDING':
-        //     return {
-        //         ...state
-        //     }
-        // case 'PAGINATE_PRODUCT_REJECTED':
-        //     return {
-        //         ...state
-        //     }
-        // case 'PAGINATE_PRODUCT_FULFILLED':
-        //     return {
-        //         ...state,
-        //         products: action.payload.data.pagination
-        //     }
         default:
             return state;
     }
